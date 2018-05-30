@@ -4,7 +4,9 @@
   "description": "Cards Against Humanity",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon src/main.js"
+    "start": "nodemon src/main.js",
+    "watch": "webpack --watch",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -18,13 +20,21 @@
   },
   "homepage": "https://github.com/HKeca/cards-against-humanity#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0"
+    "eslint-plugin-standard": "^3.1.0",
+    "webpack": "^4.10.1",
+    "webpack-cli": "^2.1.4"
   }
 }
