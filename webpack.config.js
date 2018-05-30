@@ -7,6 +7,7 @@ module.exports = {
         filename: 'bundle.js',
         publicPath: '/public'
     },
+    mode: 'development',
     module: {
         rules: [
             {
@@ -15,7 +16,11 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
-            }
+            },
+            {
+                test:/\.(s*)css$/,
+                use:['style-loader','css-loader', 'sass-loader']
+             }
         ]
     }
 };
