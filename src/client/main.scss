@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30em;
+}
+
+nav, header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 30em;
+}
+
+.rooms {
+  display: flex;
+  flex-direction: column;
+}
+
+.room {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1, h2, p, button {
+  font-family: 'Roboto';
+}
+
+nav p {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 25px;
+}
+
+h2 {
+  font-weight: 700;
+  font-size: 35px;
+}
+
+button {
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 0 15px;
+  font-weight: 500;
+  border: none;
+  height: 40px;
+  color: #fff;
+}
+
+header button {
+  background: #81C784;
+}
+
+.room {
+  button {
+    background: #42A5F5;
+  }
+  p {
+    font-size: 20px;
+  }
+}
