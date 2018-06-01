@@ -1,13 +1,15 @@
+const uuid = require('uuid/v4');
+
 class Session
 {
     /**
      * Session
      */
-    constructor(host, options = {})
+    constructor(host, meta = {})
     {
-        this.id             = 1; // TODO: Gen uuid
+        this.id             = uuid();
         this.host           = host;
-        this.options        = options;
+        this.meta           = meta;
         this.players        = new Map();
         this.currentCard    = {};
     }

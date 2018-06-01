@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 class Player
 {
     /**
@@ -5,7 +7,7 @@ class Player
      */
     constructor(name, score)
     {
-        this.id = 1; // TODO: Gen uuid
+        this.id = uuid();
         this.name = name;
         this.score = score;
         this.cards = [];

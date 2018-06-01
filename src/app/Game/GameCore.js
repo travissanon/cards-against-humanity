@@ -1,10 +1,12 @@
+const Session = require('./Session');
+
 class GameCore
 {
     /**
      * Game Core
      */
     constructor() {
-        this.sessions = new Map();
+        this.gameSessions = [];
     }
 
     /**
@@ -13,9 +15,12 @@ class GameCore
      * @return {Void}
      */
     createSession(host) {
-        let newSesh = new Session(host);
+        this.deleteCurrentHosted(host.id);
+        
+        let lobbyDetails = {name: `${Math.random() * 100}`, status: false};
+        let newSesh = new Session(host.id, lobbyDetails);
 
-        this.sessions.set(newSesh.id, newSesh);
+        this.gameSessions.push(newSesh);
     }
 
     /**
@@ -24,7 +29,20 @@ class GameCore
      * @return {Void}
      */
     deleteSession(session) {
-        this.sessions.delete(session.id);
+        delete this.gameSessions[session];
+    }
+
+    /**
+     * Remove any currently hosted session by user
+     * @param  {Int} id
+     * @return {Void}
+     */
+    deleteCurrentHosted(id) {
+        let newSessions = this.gameSessions.filter(session => {
+            return session.host !== id;
+        });
+
+        this.gameSessions = newSessions;
     }
 }
 
