@@ -1,0 +1,32 @@
+@import "variables";
+
+// Components
+@import "components/nav";
+@import "components/inputs";
+@import "components/lobby";
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30em;
+}
+
+.rooms {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 25px;
+}
+
+h2 {
+    font-weight: 700;
+    font-size: 35px;
+}

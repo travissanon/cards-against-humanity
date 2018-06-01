@@ -1,0 +1,17 @@
+.btn {
+    border-radius: 5px;
+    font-size: 18px;
+    padding: 0 15px;
+    font-weight: 500;
+    border: none;
+    height: 40px;
+    color: #fff;
+}
+
+.btn--blue {
+    @include setBgHover($blue);
+}
+
+.btn--green {
+    @include setBgHover($green);
+}

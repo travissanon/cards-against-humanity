@@ -4,7 +4,7 @@ class GameCore
      * Game Core
      */
     constructor() {
-        this.sessions = [];
+        this.sessions = new Map();
     }
 
     /**
@@ -15,7 +15,7 @@ class GameCore
     createSession(host) {
         let newSesh = new Session(host);
 
-        this.sessions.push(newSesh);
+        this.sessions.set(newSesh.id, newSesh);
     }
 
     /**
@@ -24,7 +24,7 @@ class GameCore
      * @return {Void}
      */
     deleteSession(session) {
-        this.sessions[session] = null;
+        this.sessions.delete(session.id);
     }
 }
 

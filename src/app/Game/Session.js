@@ -8,7 +8,7 @@ class Session
         this.id             = 1; // TODO: Gen uuid
         this.host           = host;
         this.options        = options;
-        this.players        = [];
+        this.players        = new Map();
         this.currentCard    = {};
     }
 
@@ -17,7 +17,7 @@ class Session
      * @param {Player} player
      */
     addPlayer(player) {
-        this.players.push(player);
+        this.players.set(player.id, player);
     }
 
     /**
@@ -26,7 +26,7 @@ class Session
      * @return {Void}
      */
     removePlayer(player) {
-        this.players[player] = null;
+        this.players.delete(player.id);
     }
 }
 
