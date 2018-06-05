@@ -12,24 +12,42 @@ class HomePage extends Component
 
         this.socket = io('127.0.0.1:3000');
         this.state = {
+            user: {},
             lobbies: []
         };
 
         this.createLobby = this.createLobby.bind(this);
+        this.signIn = this.signIn.bind(this);
+        this.joinLobby = this.joinLobby.bind(this);
     }
 
     componentDidMount() {
+        this.socket.on('update user', data => this.setState({ user: data }));
         this.socket.on('update lobbies', data => this.setState({ lobbies: data}));
+        this.socket.on('status', data => console.log(data));
     }
 
     createLobby() {
        this.socket.emit('create lobby');
     }
 
+    signIn() {
+        let username = prompt("Please enter a name");
+
+        if (!username)
+            return;
+
+        this.socket.emit('login', {name: username});
+    }
+
+    joinLobby(lobbyId) {
+        this.socket.emit('join lobby', {id: lobbyId});
+    }
+
     render() {
         return (
             <div className="container">
-                <NavBar />
+                <NavBar user={this.state.user} loginHandler={this.signIn} />
                 <div>
                     <header>
                         <h2>Lobby</h2>
@@ -38,7 +56,10 @@ class HomePage extends Component
                     <div className="rooms">
                         {
                             this.state.lobbies.map((lobby, index) => (
-                                <Lobby key={index} name={lobby.meta.name} status={lobby.meta.status} />
+                                <Lobby key={index} id={lobby.id} 
+                                       name={lobby.meta.name} 
+                                       status={lobby.meta.status} 
+                                       joinHandler={this.joinLobby} />
                             ))
                         }
                     </div>

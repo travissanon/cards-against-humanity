@@ -9,10 +9,14 @@ class NavBar extends Component
 
     render()
     {
+        let user = this.props.user;
+
         return (
             <nav>
                 <h1>CAH</h1>
-                <p>Name</p>
+                <p onClick={this.props.loginHandler.bind(null)}>
+                    {user.name ? user.name : 'Name'}
+                </p>
             </nav>
         );
     }

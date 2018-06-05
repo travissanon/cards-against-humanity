@@ -13,7 +13,8 @@ class Lobby extends Component
                 <p className="lobby--status">
                     {this.props.status ? 'Private' : 'Public'}
                 </p>
-                <button className="btn btn--blue">Join</button>
+                <button onClick={this.props.joinHandler.bind(null, this.props.id)} 
+                    className="btn btn--blue">Join</button>
             </div>
         );
     }
