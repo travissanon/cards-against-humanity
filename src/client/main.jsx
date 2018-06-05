@@ -1,48 +1,16 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './main.scss';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import './styles/main.scss';
 
-class Main extends Component
-{
-    render() {
-        return (
-            <div class="container">
-                <Header/>
-                <Lobby/>
-            </div>
-        );
-    }
-}
+// Pages
+import HomePage from './pages/HomePage.jsx';
 
-class Header extends Component {
-	render() {
-		return (
-			<nav>
-				<h1>CAH</h1>
-				<p>Name</p>
-			</nav>
-		);
-	}
-}
+// Routes
+const Routes = () => (
+    <Router>
+        <Route exact path="/" component={HomePage} />
+    </Router>
+);
 
-class Lobby extends Component {
-	render() {
-		return (
-			<div>
-				<header>
-					<h2>Lobby</h2>
-					<button>New Game</button>
-				</header>
-				<div class="rooms">
-					<div class="room">
-						<p>Test server</p>
-						<p>(status)</p>
-						<button>Join</button>
-					</div>
-				</div>
-			</div>
-		)
-	}
-}
-
-ReactDOM.render(<Main />, document.getElementById('app'));
+ReactDOM.render(<Routes />, document.getElementById('app'));

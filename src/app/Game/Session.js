@@ -1,32 +1,16 @@
+const uuid = require('uuid/v4');
+
 class Session
 {
     /**
      * Session
      */
-    constructor(host, options = {})
+    constructor(host, meta = {})
     {
-        this.id             = 1; // TODO: Gen uuid
+        this.id             = uuid();
         this.host           = host;
-        this.options        = options;
-        this.players        = [];
+        this.meta           = meta;
         this.currentCard    = {};
-    }
-
-    /**
-     * Add player
-     * @param {Player} player
-     */
-    addPlayer(player) {
-        this.players.push(player);
-    }
-
-    /**
-     * Remove player
-     * @param  {Player} player
-     * @return {Void}
-     */
-    removePlayer(player) {
-        this.players[player] = null;
     }
 }
 

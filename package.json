@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "nodemon src/main.js",
-    "watch": "webpack --watch",
+    "watch": "webpack --watch --progress --hide-modules",
     "build": "webpack"
   },
   "repository": {
@@ -22,7 +22,11 @@
   "dependencies": {
     "express": "^4.16.3",
     "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react-dom": "^16.4.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "socket.io": "^2.1.1",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

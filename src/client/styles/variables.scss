@@ -1,0 +1,13 @@
+// Colors
+$green: #81C784;
+$blue: #42A5F5;
+
+// Mixins
+@mixin setBgHover($basecolor) {
+    background-color: $basecolor;
+    
+    &:hover {
+        background-color: darken($basecolor, 15%);
+    }
+}
+    

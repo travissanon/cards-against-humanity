@@ -1,14 +1,17 @@
+const uuid = require('uuid/v4');
+
 class Player
 {
     /**
      * Player
      */
-    constructor(name, score)
+    constructor(name)
     {
-        this.id = 1; // TODO: Gen uuid
-        this.name = name;
-        this.score = score;
-        this.cards = [];
+        this.id      = uuid();
+        this.name    = name;
+        this.score   = 0;
+        this.cards   = [];
+        this.session = '';
     }
 
     /**
@@ -36,3 +39,5 @@ class Player
         this.score--;
     }
 }
+
+module.exports = Player;

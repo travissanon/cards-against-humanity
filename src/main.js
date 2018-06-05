@@ -1,8 +1,10 @@
 const express   = require('express');
-const config    = require('../config.js');
+const app       = express();
+const http      = require('http').Server(app);
+const io        = require('socket.io')(http);
+const config    = require('../config');
 const path      = require('path');
-
-const app = express();
+const handle    = require('./app/main');
 
 app.use('/public/', express.static(path.join(__dirname, '../public')));
 
@@ -12,4 +14,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.listen(config.port, () => console.log(`Listening on port ${config.port}`));
+io.on('connection', handle);
+
+http.listen(config.port, () => console.log(`Listening on port ${config.port}`));
