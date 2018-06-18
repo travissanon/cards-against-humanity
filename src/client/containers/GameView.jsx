@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
 // Components
 import Hand from '../components/Hand.jsx';
 import Table from '../components/Table.jsx';
@@ -22,4 +22,12 @@ class GameView extends Component {
   
 }
 
-export default GameView;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GameView);

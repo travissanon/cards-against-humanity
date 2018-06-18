@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { 
+    BrowserRouter as Router, 
+    Switch, 
+    Route,
+} from "react-router-dom";
+
 import './styles/main.scss';
 
 // Pages
-import HomePage from './pages/HomePage.jsx';
-import GameView from './pages/GameView.jsx';
+import HomePage from './containers/HomePage.jsx';
+import GameView from './containers/GameView.jsx';
 
 // Routes
-const Routes = () => (
+export const Routes = () => (
     <Router>
         <Switch>
             <Route exact path="/" component={HomePage} />
@@ -16,5 +20,3 @@ const Routes = () => (
         </Switch>
     </Router>
 );
-
-ReactDOM.render(<Routes />, document.getElementById('app'));

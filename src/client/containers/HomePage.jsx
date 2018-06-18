@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import io from 'socket.io-client';
 import config from '../../../config';
 
@@ -70,4 +71,12 @@ class HomePage extends Component
   }
 }
 
-export default HomePage;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
