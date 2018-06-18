@@ -12,7 +12,7 @@ const Routes = () => (
     <Router>
         <Switch>
             <Route exact path="/" component={HomePage} />
-            <Route exact path="/test" component={GameView} />
+            <Route exact path="/lobby/:id" component={GameView} />
         </Switch>
     </Router>
 );

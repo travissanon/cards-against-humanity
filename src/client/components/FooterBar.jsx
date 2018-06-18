@@ -11,9 +11,9 @@ class FooterBar extends Component {
 
   render() {
     return (
-      <div className="FooterBar">
+      <div className="footerbar">
         <Timer />
-        <div className="users">
+        <div className="footerbar__users">
           <User />
           <User />
           <User />
