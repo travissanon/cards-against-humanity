@@ -8,7 +8,7 @@ const handle    = require('./app/main');
 
 app.use('/public/', express.static(path.join(__dirname, '../public')));
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
     res.sendFile('index.html', {
         root: path.join(__dirname, '../public/')
     });
