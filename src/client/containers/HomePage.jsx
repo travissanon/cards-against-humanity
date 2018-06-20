@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import io from 'socket.io-client';
-import config from '../../../config';
 
 // Components
 import NavBar from '../components/NavBar.jsx';
@@ -9,14 +7,8 @@ import Lobby from '../components/Lobby.jsx';
 
 class HomePage extends Component
 {
-  constructor() {
-    super();
-
-    this.socket = io(config.serverAddress);
-    this.state = {
-        user: {},
-        lobbies: []
-    };
+  constructor(props) {
+    super(props);
 
     this.createLobby = this.createLobby.bind(this);
     this.signIn = this.signIn.bind(this);
@@ -24,13 +16,21 @@ class HomePage extends Component
   }
 
   componentDidMount() {
-    this.socket.on('update user', data => this.setState({ user: data }));
-    this.socket.on('update lobbies', data => this.setState({ lobbies: data}));
-    this.socket.on('status', data => console.log(data));
+    this.props.socket.on('update user', user => this.props.updateUser(user));
+    this.props.socket.on('update lobbies', lobbies => this.props.updateLobbies(lobbies));
+    this.props.socket.on('change lobby', lobbyId => this.props.history.push(`/lobby/${lobbyId}`));
+    this.props.socket.on('status', data => console.log(data));
+  }
+
+  componentWillUnmount() {
+    this.props.socket.off('update user');
+    this.props.socket.off('update lobbies');
+    this.props.socket.off('change lobby');
+    this.props.socket.off('status');
   }
 
   createLobby() {
-    this.socket.emit('create lobby');
+    this.props.socket.emit('create lobby');
   }
 
   signIn() {
@@ -39,7 +39,7 @@ class HomePage extends Component
     if (!username)
         return;
 
-    this.socket.emit('login', {name: username});
+    this.props.socket.emit('login', {name: username});
   }
 
   joinLobby(lobbyId) {
@@ -48,35 +48,45 @@ class HomePage extends Component
 
   render() {
     return (
-        <div className="container">
-          <NavBar user={this.state.user} loginHandler={this.signIn} />
-          <div>
-            <header>
-              <h2>Lobby</h2>
-              <button onClick={this.createLobby} className="btn btn--green">New Game</button>
-            </header>
-            <div className="rooms">
-                {
-                  this.state.lobbies.map((lobby, index) => (
-                    <Lobby key={index} id={lobby.id} 
-                          name={lobby.meta.name} 
-                          status={lobby.meta.status} 
-                          joinHandler={this.joinLobby} />
-                  ))
-                }
-            </div>
+      <div className="container">
+        <NavBar user={this.props.user ? this.props.user : {}} loginHandler={this.signIn} />
+        <div>
+          <header>
+            <h2>Lobby</h2>
+            <button onClick={this.createLobby} className="btn btn--green">New Game</button>
+          </header>
+          <div className="rooms">
+              {
+                this.props.lobbies.map((lobby, index) => (
+                  <Lobby key={index} id={lobby.id} 
+                        name={lobby.meta.name} 
+                        status={lobby.meta.status} 
+                        joinHandler={this.joinLobby} />
+                ))
+              }
           </div>
         </div>
+      </div>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    user: state.auth.user,
+    lobbies: state.lobby.lobbies
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    updateUser: (user) => {
+      dispatch({type: 'SET_USER', payload: user});
+    },
+    updateLobbies: (lobbies) => {
+      dispatch({type: 'UPDATE_LOBBIES', payload: lobbies})
+    }
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
