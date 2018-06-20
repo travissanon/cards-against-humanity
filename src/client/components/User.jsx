@@ -7,7 +7,7 @@ class User extends Component {
 
   render() {
     return (
-      <div className="user" />
+      <div className="user" title={this.props.player.name} />
     );
   }
   

@@ -11,10 +11,11 @@ class Hand extends Component {
   render() {
     return (
       <div className="hand">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {
+          this.props.cards.map((card, index) => (
+            <Card key={index} text={card.text} />
+          ))
+        }
       </div>
     );
   }

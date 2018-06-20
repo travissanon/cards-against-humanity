@@ -1,6 +1,6 @@
 const initialState = {
   lobbies: [],
-  currentLobby: null
+  currentLobby: {}
 };
 
 const LobbyReducer = (state = initialState, action = {}) => {
@@ -11,7 +11,7 @@ const LobbyReducer = (state = initialState, action = {}) => {
         lobbies: [...action.payload]
       };
       break;
-    case "SET_CURRENTLOBBY":
+    case "UPDATE_CURRENTLOBBY":
       state = {
         ...state,
         currentLobby: action.payload

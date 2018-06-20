@@ -1,4 +1,5 @@
 const Session = require('./Session');
+const Card = require('./Card');
 
 class GameCore
 {
@@ -47,16 +48,32 @@ class GameCore
     });
   }
 
-/**
- * Remove any currently hosted session by user
- * @param  {Int} id
- * @return {Void}
- */
-deleteCurrentHosted(id) {
-  this.gameSessions = this.gameSessions.filter(session => {
-    return session.host !== id;
-  });
-}
+  /**
+   * Remove any currently hosted session by user
+   * @param  {Int} id
+   * @return {Void}
+   */
+  deleteCurrentHosted(id) {
+    this.gameSessions = this.gameSessions.filter(session => {
+      return session.host !== id;
+    });
+  }
+
+  /**
+   * Get a session
+   * @param {integer} lobbyId - lobby id
+   * @returns {Session} session - game session
+   */
+  getSession(lobbyId) {
+    let session = this.gameSessions.filter(session => {
+      return session.id == lobbyId;
+    });
+
+    if (session.length < 1)
+      return false;
+
+    return session[0];
+  }
 
   /**
    * Join game session
@@ -68,12 +85,27 @@ deleteCurrentHosted(id) {
     if (!socket.user.name)
       return;
 
+    let lobby = this.getSession(lobbyId);
+    
+    if (!lobby)
+      return;
+
+    // Add player to session
     socket.join('lobby-' + lobbyId);
-    // Update user's current session
     socket.user.session = lobbyId;
+    lobby.addPlayer(socket.user);
+
+    // testing give cards
+    socket.user.giveCard(new Card("Placeholder Text"));
+    socket.user.giveCard(new Card("Placeholder Text"));
 
     socket.emit('status', 'joined lobby');
+    socket.emit('update cards', socket.user.cards);
     socket.broadcast.to('lobby-' + lobbyId).emit('status', `${socket.user.name} has joined`);
+
+    //Update players in lobby
+    socket.emit('update lobby', lobby);
+    socket.broadcast.to('lobby-' + lobbyId).emit('update lobby', lobby);
   }
 
   /**
@@ -86,12 +118,23 @@ deleteCurrentHosted(id) {
     if (!socket.user.session)
       return;
 
-    socket.leave('lobby-' + lobbyId);
-    // Update user's current session
-    socket.user.session = "";
+    let lobby = this.getSession(lobbyId);
+    
+    if (!lobby)
+      return;
 
+    // Remove player
+    socket.leave('lobby-' + lobbyId);
+    socket.user.session = "";
+    lobby.removePlayer(socket.user);
+
+    // Leave status
     socket.emit('status', 'left lobby');
     socket.broadcast.to('lobby-' + lobbyId).emit('status', `${socket.user.name} has left`);
+
+    // Update lobby
+    socket.emit('update lobby', {});
+    socket.broadcast.to('lobby-' + lobbyId).emit('update lobby', lobby);
   }
 }
 

@@ -8,7 +8,7 @@ class Card extends Component {
   render() {
     return (
       <div className="hand__card">
-        <p>Japanese water</p>
+        <p>{this.props.text}</p>
       </div>
     );
   }
