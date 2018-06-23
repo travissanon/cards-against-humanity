@@ -7,7 +7,7 @@ class Timer extends Component {
 
   render() {
     return (
-      <div className="timer">
+      <div className="footerbar__timer">
         <p>1:00</p>
       </div>
     );

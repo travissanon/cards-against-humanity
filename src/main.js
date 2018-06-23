@@ -4,7 +4,7 @@ const http      = require('http').Server(app);
 const io        = require('socket.io')(http);
 const config    = require('../config');
 const path      = require('path');
-const handle    = require('./app/main');
+const handle    = require('./app/handle');
 
 app.use('/public/', express.static(path.join(__dirname, '../public')));
 

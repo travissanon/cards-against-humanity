@@ -11,14 +11,15 @@ class FooterBar extends Component {
 
   render() {
     return (
-      <div className="FooterBar">
+      <div className="footerbar">
         <Timer />
-        <div className="users">
-          <User />
-          <User />
-          <User />
-          <User />
-          <User />
+        <div className="footerbar__users">
+          {
+            this.props.lobby.players &&
+            this.props.lobby.players.map((player, index) => (
+              <User player={player} key={index} />
+            ))
+          }
         </div>
       </div>
     );
