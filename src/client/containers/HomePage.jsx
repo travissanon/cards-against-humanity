@@ -18,7 +18,7 @@ class HomePage extends Component
   componentDidMount() {
     this.props.socket.on('update user', user => this.props.updateUser(user));
     this.props.socket.on('update lobbies', lobbies => this.props.updateLobbies(lobbies));
-    this.props.socket.on('change lobby', lobbyId => this.props.history.push(`/lobby/${lobbyId}`));
+    this.props.socket.on('change lobby', lobbyId => this.props.history.push(`/lobby/${lobbyId}?h=1`));
     this.props.socket.on('status', data => console.log(data));
   }
 

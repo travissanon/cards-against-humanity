@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
 class Timer extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   render() {
     return (
       <div className="footerbar__timer">
-        <p>1:00</p>
+        <p>{this.props.time}</p>
       </div>
     );
   }

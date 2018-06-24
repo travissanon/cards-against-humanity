@@ -11,6 +11,28 @@ class GameCore
   }
 
   /**
+   * Update client time with host
+   * @param {Socket} socket 
+   * @param {string} newTime 
+   */
+  updateClock(socket, newTime) {
+    if (!socket.user.session)
+      return;
+    
+    let session = null;
+    if (!(session = this.getSession(socket.user.session)))
+      return;
+
+    if (session.host !== socket.id) {
+      console.log("Non-host user tried to change clock");
+      return;
+    }
+  
+    session.clock = newTime;
+    socket.broadcast.to(`lobby-${session.id}`).emit('update clock', session.clock);  
+  }
+
+  /**
    * Create new game session
    * @param  {Socket} socket client socket
    * @return {Void}

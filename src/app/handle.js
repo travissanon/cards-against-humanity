@@ -21,6 +21,10 @@ function handle(socket) {
     GameCore.joinSession(socket, lobbyId);
   });
 
+  socket.on('set clock', function(time) {
+    GameCore.updateClock(socket, time);
+  });
+
   socket.on('disconnect', function() {
     // Delete any hosted games when user disconnects
     GameCore.deleteCurrentHosted(socket.id);

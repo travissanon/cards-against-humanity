@@ -12,6 +12,7 @@ class Session
     this.meta           = meta;
     this.currentCard    = {};
     this.players        = [];
+    this.clock          = 0;
   }
 
   /**
