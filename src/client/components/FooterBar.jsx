@@ -5,14 +5,14 @@ import User from './User.jsx';
 import Timer from './Timer.jsx';
 
 class FooterBar extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   render() {
     return (
       <div className="footerbar">
-        <Timer />
+        <Timer time={this.props.time} />
         <div className="footerbar__users">
           {
             this.props.lobby.players &&
