@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { 
     BrowserRouter as Router, 
     Switch, 
@@ -15,6 +15,13 @@ import HomePage from './containers/HomePage.jsx';
 import GameView from './containers/GameView.jsx';
 
 const socket = io(config.serverAddress);
+
+// Send commands from console
+if (config.debug) {
+    window.sendCommand = (action, args) => {
+        socket.emit(action, args);
+    };
+}
 
 // Routes
 export const Routes = () => (

@@ -10,6 +10,9 @@ class GameView extends Component {
   constructor(props) {
     super(props);
 
+    if (!this.props.user)
+      this.props.history.push('/');
+
     let params = qs.parse(this.props.location.search);
 
     this.state = {
@@ -19,36 +22,52 @@ class GameView extends Component {
     };
 
     this.tick = this.tick.bind(this);
+    this.handleCommand = this.handleCommand.bind(this);
   }
 
   componentDidMount() {
-    if (!this.props.user)
-      this.props.history.push('/');
-
     if (this.state.isHost) {
-      let intervalId = setInterval(this.tick, 1010);
+      let intervalId = setInterval(this.tick, 1000);
 
       this.setState({ timerInterval: intervalId });
     }
 
     this.props.socket.emit('join lobby', this.props.match.params.id);
-    this.props.socket.on('update cards', cards => this.props.updateHand(cards));
-    this.props.socket.on('update lobby', lobby => this.props.updateLobby(lobby));
-    this.props.socket.on('update clock', time => this.setState({ timer: time }));
-    this.props.socket.on('status', data => console.log(data));
+    this.props.socket.on('lobby command', cmd => this.handleCommand(cmd));
   }
 
   componentWillUnmount() {
-    this.props.socket.off('update cards');
-    this.props.socket.off('update lobby');
-    this.props.socket.off('update clock');
-    this.props.socket.off('status');
+    this.props.socket.off('lobby command');
 
-    if (this.state.isHost && this.state.timerInterval)
-      clearInterval(this.state.timerInterval);
+    clearInterval(this.state.timerInterval);
+  }
+
+  handleCommand(command) {
+    switch(command.type) {
+      case "update_cards":
+        this.props.updateHand(command.payload);
+        break;
+      
+      case "update_lobby":
+        this.props.updateLobby(command.payload);
+        break;
+      
+      case "update_clock":
+        this.setState({ timer: command.payload });
+        break;
+      
+      case "status":
+        console.log(command.payload);
+        break;
+    }
   }
 
   tick() {
+    if (this.state.timer < 1) {
+      clearInterval(this.state.timerInterval);
+      return;
+    }
+    
     this.setState({ 
       timer: this.state.timer - 1
     });
@@ -59,13 +78,12 @@ class GameView extends Component {
   render() {
     return (
       <div className="container">
-        <Table />
+        <Table blackCard={this.props.lobby.currentCard} />
         <Hand cards={this.props.hand} />
         <FooterBar time={this.state.timer} lobby={this.props.lobby} />
       </div>
     );
   }
-  
 }
 
 const mapStateToProps = (state) => {

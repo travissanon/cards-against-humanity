@@ -30,7 +30,7 @@ function handle(socket) {
     GameCore.deleteCurrentHosted(socket.id);
 
     if (socket.user)
-        GameCore.leaveSession(socket, socket.user.session);
+        GameCore.leaveSession(socket);
     
     // Update lobby info
     socket.broadcast.emit('update lobbies', GameCore.gameSessions);

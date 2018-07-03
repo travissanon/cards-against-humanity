@@ -13,7 +13,8 @@ class GameCore
   /**
    * Update client time with host
    * @param {Socket} socket 
-   * @param {string} newTime 
+   * @param {string} newTime
+   * @returns {Void}
    */
   updateClock(socket, newTime) {
     if (!socket.user.session)
@@ -29,13 +30,16 @@ class GameCore
     }
   
     session.clock = newTime;
-    socket.broadcast.to(`lobby-${session.id}`).emit('update clock', session.clock);  
+    socket.broadcast.to(`lobby-${session.id}`).emit('lobby command', {
+      type: 'update_clock', 
+      payload: session.clock
+    });
   }
 
   /**
    * Create new game session
    * @param  {Socket} socket client socket
-   * @return {Void}
+   * @returns {Void}
    */
   createSession(socket) {
     if (!socket.user.name)
@@ -53,6 +57,9 @@ class GameCore
     // Auto join created session
     socket.join('lobby-' + newSesh.id);
 
+    // Starting black card
+    newSesh.currentCard = new Card('Did you drink japanese water?');
+
     // Update lobby list
     socket.emit('update lobbies', this.gameSessions);
     socket.broadcast.emit('update lobbies', this.gameSessions);
@@ -62,7 +69,7 @@ class GameCore
   /**
    * Remove session
    * @param  {Session} session
-   * @return {Void}
+   * @returns {Void}
    */
   deleteSession(sessionId) {
     this.gameSessions = this.gameSessions.filter(session => {
@@ -73,7 +80,7 @@ class GameCore
   /**
    * Remove any currently hosted session by user
    * @param  {Int} id
-   * @return {Void}
+   * @returns {Void}
    */
   deleteCurrentHosted(id) {
     this.gameSessions = this.gameSessions.filter(session => {
@@ -101,7 +108,7 @@ class GameCore
    * Join game session
    * @param  {Socket} socket  client socket
    * @param  {Uuid} lobbyId Lobby id
-   * @return {Void}
+   * @returns {Void}
    */
   joinSession(socket, lobbyId) {
     if (!socket.user.name)
@@ -121,25 +128,31 @@ class GameCore
     socket.user.giveCard(new Card("Placeholder Text"));
     socket.user.giveCard(new Card("Placeholder Text"));
 
-    socket.emit('status', 'joined lobby');
-    socket.emit('update cards', socket.user.cards);
-    socket.broadcast.to('lobby-' + lobbyId).emit('status', `${socket.user.name} has joined`);
+    socket.emit('lobby command', {type: 'status', payload: 'joined lobby'});
+    socket.emit('lobby command', {type: 'update_cards', payload: socket.user.cards});
+    socket.broadcast.to('lobby-' + lobbyId).emit('lobby command', {
+      type: 'status',
+      payload: `${socket.user.name} has joined`
+    });
 
     //Update players in lobby
-    socket.emit('update lobby', lobby);
-    socket.broadcast.to('lobby-' + lobbyId).emit('update lobby', lobby);
+    socket.emit('lobby command', {type: 'update_lobby', payload: lobby});
+    socket.broadcast.to('lobby-' + lobbyId).emit('lobby command', {
+      type: 'update_lobby',
+      payload: lobby
+    });
   }
 
   /**
    * Disconnect from a lobby
    * @param  {Socket} socket  client socket
-   * @param  {Uuid} lobbyId Lobby Id
-   * @return {Void}
+   * @returns {Void}
    */
-  leaveSession(socket, lobbyId) {
+  leaveSession(socket) {
     if (!socket.user.session)
       return;
-
+    
+    let lobbyId = socket.user.session;
     let lobby = this.getSession(lobbyId);
     
     if (!lobby)
@@ -151,12 +164,18 @@ class GameCore
     lobby.removePlayer(socket.user);
 
     // Leave status
-    socket.emit('status', 'left lobby');
-    socket.broadcast.to('lobby-' + lobbyId).emit('status', `${socket.user.name} has left`);
+    socket.emit('lobby command', {type: 'status', payload: 'left lobby'});
+    socket.broadcast.to('lobby-' + lobbyId).emit('lobby command', {
+      type: 'status',
+      payload: `${socket.user.name} has left`
+    });
 
     // Update lobby
-    socket.emit('update lobby', {});
-    socket.broadcast.to('lobby-' + lobbyId).emit('update lobby', lobby);
+    socket.emit('lobby command', {type: 'update_lobby', payload: {}});
+    socket.broadcast.to('lobby-' + lobbyId).emit('lobby command', {
+      type: 'update_lobby', 
+      payload: lobby
+    });
   }
 }
 
