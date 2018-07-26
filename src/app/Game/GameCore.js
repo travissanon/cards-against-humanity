@@ -37,6 +37,26 @@ class GameCore
   }
 
   /**
+   * End player's turn and switch czar
+   * @param {Socket} socket 
+   * @param {Player} selectedPlayer
+   * @returns {Void} 
+   */
+  endPlayerTurn(socket, selectedPlayer) {
+    let session = this.getSession(socket.user.session);
+
+    if (!session)
+      return;
+
+    session.endTurn(socket.user, selectedPlayer);
+
+    socket.emit('lobby command', {
+      type: 'status',
+      payload: `Czar has changed to ${session.czar.name}`
+    });
+  }
+
+  /**
    * Create new game session
    * @param  {Socket} socket client socket
    * @returns {Void}
@@ -57,6 +77,8 @@ class GameCore
     // Auto join created session
     socket.join('lobby-' + newSesh.id);
 
+    newSesh.czar = socket.user;
+    
     // Starting black card
     newSesh.currentCard = new Card('Did you drink japanese water?');
 
@@ -64,6 +86,10 @@ class GameCore
     socket.emit('update lobbies', this.gameSessions);
     socket.broadcast.emit('update lobbies', this.gameSessions);
     socket.emit('change lobby', newSesh.id);
+    socket.emit('lobby command', {
+      type: 'status', 
+      payload: `New czar is: ${newSesh.czar.name}`
+    });
   }
 
   /**
