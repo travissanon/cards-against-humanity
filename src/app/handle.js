@@ -25,6 +25,10 @@ function handle(socket) {
     GameCore.updateClock(socket, time);
   });
 
+  socket.on('end turn', function(selectedPlayer) {
+    GameCore.endPlayerTurn(socket, selectedPlayer);
+  });
+
   socket.on('disconnect', function() {
     // Delete any hosted games when user disconnects
     GameCore.deleteCurrentHosted(socket.id);
